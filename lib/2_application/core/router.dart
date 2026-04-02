@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/2_application/core/go_router_observer.dart';
+import 'package:todo_app/2_application/pages/home/home_page.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(
   debugLabel: 'root',
@@ -8,7 +9,7 @@ final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(
 
 final routes = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/home',
+  initialLocation: '/home/home',
   redirect: (context, state) {
     // If the user lands on /home, send them to /home/start automatically
     if (state.uri.path == '/home') return '/home/start';
@@ -71,21 +72,9 @@ final routes = GoRouter(
     ),
 
     GoRoute(
-      path: '/home/new',
+      path: '/home/home',
       builder: (context, state) {
-        return Container(
-          color: Colors.lightGreenAccent,
-          child: Column(
-            children: [
-              TextButton(
-                onPressed: () {
-                  context.pop();
-                },
-                child: Text('Go back'),
-              ),
-            ],
-          ),
-        );
+        return HomePage();
       },
     ),
   ],
