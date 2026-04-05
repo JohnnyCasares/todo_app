@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/2_application/core/adaptive_layout.dart';
+import 'package:todo_app/2_application/core/navigation/destinations.dart';
+import 'package:todo_app/2_application/core/widgets/adaptive_layout.dart';
+import 'package:todo_app/2_application/pages/dashboard/dashboard_page.dart';
+import 'package:todo_app/2_application/pages/overview/overview_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  HomePage({super.key, required String tab})
+    : index = destinations.indexWhere((element) => element.routeName == tab);
+
+  final int index;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -13,10 +19,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: AdatptiveLayout(
-          pane1: Container(color: Colors.red),
-          pane2: Container(color: Colors.black),
-        ),
+        child: AdaptiveLayout(child: destinations[widget.index].child),
       ),
     );
   }

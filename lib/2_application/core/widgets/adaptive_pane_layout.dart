@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class AdaptivePaneLayout extends StatelessWidget {
-  const AdaptivePaneLayout({super.key, required this.one, required this.two});
+  const AdaptivePaneLayout({super.key, required this.one, this.two});
 
   final Widget one;
-  final Widget two;
+  final Widget? two;
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +27,9 @@ class AdaptivePaneLayout extends StatelessWidget {
 
     return Row(
       children: [
-        Expanded(flex: 1000, child: one),
-        Expanded(flex: detailFlex, child: two),
+        Expanded(key: Key('primary-body'), flex: 1000, child: one),
+        if (two != null)
+          Expanded(key: Key('secondary-body'), flex: detailFlex, child: two!),
       ],
     );
   }
