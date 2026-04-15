@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/2_application/core/navigation/destinations.dart';
+import 'package:todo_app/2_application/core/utils/breakpoints.dart';
 import 'package:todo_app/2_application/core/widgets/navigation_widgets.dart';
 
 typedef NavigationCallback = void Function(BuildContext context, int index);
@@ -21,19 +22,11 @@ class AdaptiveLayout extends StatefulWidget {
 class _AdaptiveLayoutState extends State<AdaptiveLayout> {
   final int animationDuration = 250;
   int selectedIndex = 0;
-  bool wideScreen = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final double width = MediaQuery.of(context).size.width;
-    setState(() {
-      wideScreen = width > 600;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+    final bool wideScreen = context.isWideScreen;
+
     return Scaffold(
       body: Row(
         children: [

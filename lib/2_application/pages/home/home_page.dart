@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/2_application/core/navigation/destinations.dart';
+import 'package:todo_app/2_application/core/utils/breakpoints.dart';
 import 'package:todo_app/2_application/core/widgets/adaptive_layout.dart';
 import 'package:todo_app/2_application/pages/settings/settings_page.dart';
 
@@ -20,31 +21,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool wideScreen = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final double width = MediaQuery.of(context).size.width;
-    setState(() {
-      wideScreen = width > 600;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final bool wideScreen = context.isWideScreen;
     return Scaffold(
-      // appBar: wideScreen
-      //     ? null
-      //     : AppBar(
-      //         actions: [
-      //           IconButton(
-      //             onPressed: () =>
-      //                 context.goNamed(SettingsPage.pageConfig.routeName),
-      //             icon: Icon(SettingsPage.pageConfig.icon),
-      //           ),
-      //         ],
-      //       ),
+      appBar: wideScreen
+          ? null
+          : AppBar(
+              actions: [
+                IconButton(
+                  onPressed: () =>
+                      context.goNamed(SettingsPage.pageConfig.routeName),
+                  icon: Icon(SettingsPage.pageConfig.icon),
+                ),
+              ],
+            ),
       body: SafeArea(
         child: AdaptiveLayout(
           onNavigationSelected: _tapOnNavigationDestination,
