@@ -5,7 +5,7 @@ class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   static const pageConfig = PageConfig(
-    icon: Icons.dashboard_rounded,
+    icon: Icons.settings_rounded,
     routeName: 'settings',
     child: SettingsPage(),
   );

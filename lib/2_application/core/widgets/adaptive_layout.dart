@@ -3,9 +3,16 @@ import 'package:go_router/go_router.dart';
 import 'package:todo_app/2_application/core/navigation/destinations.dart';
 import 'package:todo_app/2_application/core/widgets/navigation_widgets.dart';
 
+typedef NavigationCallback = void Function(BuildContext context, int index);
+
 class AdaptiveLayout extends StatefulWidget {
   final Widget child;
-  const AdaptiveLayout({super.key, required this.child});
+  final NavigationCallback onNavigationSelected; // Injected dependency
+  const AdaptiveLayout({
+    super.key,
+    required this.child,
+    required this.onNavigationSelected,
+  });
 
   @override
   State<AdaptiveLayout> createState() => _AdaptiveLayoutState();
@@ -77,9 +84,6 @@ class _AdaptiveLayoutState extends State<AdaptiveLayout> {
     setState(() {
       selectedIndex = index;
     });
-    _tapOnNavigationDestination(context, selectedIndex);
+    widget.onNavigationSelected(context, selectedIndex);
   }
 }
-
-void _tapOnNavigationDestination(BuildContext context, int index) =>
-    context.go('/home/${destinations[index].routeName}');

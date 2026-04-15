@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:todo_app/2_application/core/navigation/destinations.dart';
+import 'package:todo_app/2_application/pages/settings/settings_page.dart';
 
 ///DisappearingBottomNavigationBar is used for mobile and smal vertical content
 class DisappearingBottomNavigationBar extends StatelessWidget {
@@ -41,26 +43,10 @@ class DisappearingNavigationRail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final colorScheme = Theme.of(context).colorScheme;
     return NavigationRail(
       selectedIndex: selectedIndex,
       backgroundColor: backgroundColor,
       onDestinationSelected: onDestinationSelected,
-      // leading: Column(
-      //   children: [
-      //     IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
-      //     const SizedBox(height: 8),
-      //     FloatingActionButton(
-      //       shape: const RoundedRectangleBorder(
-      //         borderRadius: BorderRadius.all(Radius.circular(15)),
-      //       ),
-      //       backgroundColor: colorScheme.tertiaryContainer,
-      //       foregroundColor: colorScheme.onTertiaryContainer,
-      //       onPressed: () {},
-      //       child: const Icon(Icons.add),
-      //     ),
-      //   ],
-      // ),
       groupAlignment: -0.85,
       destinations: destinations.map<NavigationRailDestination>((d) {
         return NavigationRailDestination(
@@ -68,6 +54,14 @@ class DisappearingNavigationRail extends StatelessWidget {
           label: Text(d.routeName),
         );
       }).toList(),
+      trailingAtBottom: true,
+      trailing: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: IconButton(
+          onPressed: () => context.goNamed(SettingsPage.pageConfig.routeName),
+          icon: Icon(SettingsPage.pageConfig.icon),
+        ),
+      ),
     );
   }
 }
