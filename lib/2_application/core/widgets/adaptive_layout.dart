@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:todo_app/2_application/core/navigation/destinations.dart';
 import 'package:todo_app/2_application/core/utils/breakpoints.dart';
 import 'package:todo_app/2_application/core/widgets/navigation_widgets.dart';
 
@@ -26,7 +24,6 @@ class _AdaptiveLayoutState extends State<AdaptiveLayout> {
   @override
   Widget build(BuildContext context) {
     final bool wideScreen = context.isWideScreen;
-
     return Scaffold(
       body: Row(
         children: [
