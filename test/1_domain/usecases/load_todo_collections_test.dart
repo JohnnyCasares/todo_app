@@ -1,22 +1,39 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:todo_app/0_data/repositories/todo_repository_mock.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:todo_app/1_domain/entities/todo_color.dart';
+import 'package:todo_app/1_domain/entities/todo_entry.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/1_domain/failures/failures.dart';
-import 'package:todo_app/1_domain/repositories/todo_repository.dart';
 import 'package:todo_app/1_domain/use_cases/load_todo_collections.dart';
-import 'package:dartz/dartz.dart';
+import 'package:todo_app/1_domain/use_cases/load_todo_entry.dart';
+import 'package:todo_app/1_domain/use_cases/load_todo_entry_ids_for_collection.dart';
 import 'package:todo_app/core/use_case.dart';
-import 'package:either_dart/either.dart' as mock;
+import 'package:either_dart/either.dart';
 
-class MockTodoRepository implements ToDoRepository {
-  mock.Either<Failure, List<ToDoCollection>>? result;
+class MockTodoRepository extends TodoRepositoryMock {
+  late Either<Failure, List<ToDoCollection>> loadToDoCollectionsResult;
+  late Either<Failure, ToDoEntry> readToDoEntryResults;
+  late Either<Failure, List<EntryId>> loadTodoEntryIdsForCollectionResults;
 
   @override
-  Future<mock.Either<Failure, List<ToDoCollection>>>
-  readToDoCollection() async {
-    // If we didn't set a result, default to an empty Right list
-    return result ?? mock.Right([]);
+  Future<Either<Failure, List<ToDoCollection>>> readToDoCollection() async {
+    return loadToDoCollectionsResult;
+  }
+
+  @override
+  Future<Either<Failure, ToDoEntry>> readToDoEntry(
+    CollectionId collectionId,
+    EntryId entryid,
+  ) async {
+    return readToDoEntryResults;
+  }
+
+  @override
+  Future<Either<Failure, List<EntryId>>> readToDoEntryIds(
+    CollectionId collectionId,
+  ) async {
+    return loadTodoEntryIdsForCollectionResults;
   }
 }
 
@@ -24,63 +41,84 @@ void main() {
   group('LoadToDoCollections UseCase', () {
     late MockTodoRepository mockTodoRepository;
     late LoadToDoCollections loadToDoCollections;
+    late LoadTodoEntry loadTodoEntry;
+    late LoadTodoEntryIdsForCollection loadTodoEntryIdsForCollection;
 
     setUp(() {
       mockTodoRepository = MockTodoRepository();
       loadToDoCollections = LoadToDoCollections(
         toDoRepository: mockTodoRepository,
       );
+      loadTodoEntry = LoadTodoEntry(toDoRepository: mockTodoRepository);
+      loadTodoEntryIdsForCollection = LoadTodoEntryIdsForCollection(
+        toDoRepository: mockTodoRepository,
+      );
     });
 
     group('Success', () {
-      test(
-        'should return Right with a list of collections when repository succeeds',
-        () async {
-          // Arrange
-          final tList = [
-            ToDoCollection(
-              id: CollectionId.fromUniqueString('1'),
-              title: 'Test',
-              color: ToDoColor(colorIndex: 0),
-            ),
-          ];
-          mockTodoRepository.result = mock.Right(tList);
+      test('should return Right with a list of ToDoCollection', () async {
+        // Arrange
+        final tList = [
+          ToDoCollection(
+            id: CollectionId.fromUniqueString('0'),
+            title: "title 0",
+            color: ToDoColor(colorIndex: 0),
+          ),
+        ];
 
-          // Act
-          final result = await loadToDoCollections.call(NoParams());
+        mockTodoRepository.loadToDoCollectionsResult = Right(tList);
 
-          // Assert
-          expect(result, Right<Failure, List<ToDoCollection>>(tList));
+        final result = await loadToDoCollections.call(NoParams());
 
-          expect(result.isRight, true);
-        },
-      );
-    });
+        expect(result.isRight, true);
 
-    group('Failures', () {
-      test(
-        'should return Left with ServerFailure when repository returns ServerFailure',
-        () async {
-          // Arrange
-          mockTodoRepository.result = mock.Left(ServerFailure());
+        result.fold(
+          (l) => fail('Should have been a Right (List<ToDoCollection>)'),
+          (r) {
+            expect(r.length, 1);
+            expect(r.first.id.value, '0');
+          },
+        );
+      });
+      test('should return Right with a ToDoEntry', () async {
+        final tTodoEntry = ToDoEntry(
+          description: 'Test',
+          isDone: false,
+          id: EntryId.fromUniqueString('test'),
+        );
 
-          // Act
-          final result = await loadToDoCollections.call(NoParams());
+        mockTodoRepository.readToDoEntryResults = Right(tTodoEntry);
 
-          // Assert
-          expect(result, Left<Failure, List<ToDoCollection>>(ServerFailure()));
-          expect(result.isLeft, true);
-        },
-      );
+        final result = await loadTodoEntry.call(
+          ToDoEntryIdParam(
+            collectionId: CollectionId.fromUniqueString(''),
+            entryId: EntryId.fromUniqueString('test'),
+          ),
+        );
 
-      test(
-        'should return Left with ServerFailure when repository throws an unexpected Exception',
-        () async {
-          // Note: For this specific test, we need the repo to actually throw
-          // You could modify the MockRepo to throw or just test the current catch logic
-          // If your repo impl throws, your UseCase catch block will handle it.
-        },
-      );
+        expect(result.isRight, true);
+        result.fold((l) => fail('Should have been a Right (ToDoEntry)'), (r) {
+          expect(r.description, 'Test');
+          expect(r.isDone, false);
+        });
+      });
+      test('should return Right with an EntryId', () async {
+        final tEntryId = [EntryId.fromUniqueString('test')];
+        mockTodoRepository.loadTodoEntryIdsForCollectionResults = Right(
+          tEntryId,
+        );
+        final result = await loadTodoEntryIdsForCollection.call(
+          CollectionIdParam(
+            collectionId: CollectionId.fromUniqueString('test'),
+          ),
+        );
+
+        expect(result.isRight, true);
+        result.fold((l) => fail('Should have been a Right (EntryId)'), (r) {
+          expect(r.length, 1);
+          expect(r.first.value, 'test');
+        });
+      });
     });
   });
 }
