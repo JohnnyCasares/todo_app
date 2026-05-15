@@ -120,5 +120,54 @@ void main() {
         });
       });
     });
+
+    group('Failure', () {
+      test('should return Left with a Failure', () async {
+        mockTodoRepository.loadToDoCollectionsResult = Left(ServerFailure());
+
+        final result = await loadToDoCollections.call(NoParams());
+
+        expect(result.isLeft, true);
+
+        result.fold(
+          (l) => expect(l, ServerFailure()),
+          (r) => fail('Should have been a Left (ServerFailure)'),
+        );
+      });
+      test('should return Left with a Failure', () async {
+        mockTodoRepository.readToDoEntryResults = Left(ServerFailure());
+
+        final result = await loadTodoEntry.call(
+          ToDoEntryIdParam(
+            collectionId: CollectionId.fromUniqueString(''),
+            entryId: EntryId.fromUniqueString('test'),
+          ),
+        );
+
+        expect(result.isLeft, true);
+
+        result.fold(
+          (l) => expect(l, ServerFailure()),
+          (r) => fail('Should have been a Left (ServerFailure)'),
+        );
+      });
+      test('should return Left with a Failure', () async {
+        mockTodoRepository.loadTodoEntryIdsForCollectionResults = Left(
+          ServerFailure(),
+        );
+        final result = await loadTodoEntryIdsForCollection.call(
+          CollectionIdParam(
+            collectionId: CollectionId.fromUniqueString('test'),
+          ),
+        );
+
+        expect(result.isLeft, true);
+
+        result.fold(
+          (l) => expect(l, ServerFailure()),
+          (r) => fail('Should have been a Left (ServerFailure)'),
+        );
+      });
+    });
   });
 }
