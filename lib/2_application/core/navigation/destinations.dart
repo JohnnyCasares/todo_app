@@ -13,5 +13,5 @@ class PageConfig {
 
 const List<PageConfig> destinations = <PageConfig>[
   DashBoardPage.pageConfig,
-  OveriewPage.pageConfig,
+  OverviewPage.pageConfig,
 ];

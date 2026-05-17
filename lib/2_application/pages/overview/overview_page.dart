@@ -19,13 +19,13 @@ class OverviewPageProvider extends StatelessWidget {
           toDoRepository: RepositoryProvider.of(context),
         ),
       )..readToDoCollections(),
-      child: const OveriewPage(),
+      child: const OverviewPage(),
     );
   }
 }
 
-class OveriewPage extends StatelessWidget {
-  const OveriewPage({super.key});
+class OverviewPage extends StatelessWidget {
+  const OverviewPage({super.key});
 
   static const pageConfig = PageConfig(
     icon: Icons.work_history_rounded,
