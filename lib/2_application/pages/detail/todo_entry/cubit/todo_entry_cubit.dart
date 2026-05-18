@@ -1,4 +1,3 @@
-import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:todo_app/1_domain/entities/todo_entry.dart';
