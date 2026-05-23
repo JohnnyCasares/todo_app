@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/1_domain/entities/todo_collection.dart';
 import 'package:todo_app/2_application/core/utils/breakpoints.dart';
 import 'package:todo_app/2_application/pages/detail/todo_detail_page.dart';
+import 'package:todo_app/2_application/pages/home/cubit/navigation_todo_cubit_cubit.dart';
 
 class ToDoOverviewLoaded extends StatelessWidget {
   const ToDoOverviewLoaded({super.key, required this.collections});
@@ -23,6 +25,9 @@ class ToDoOverviewLoaded extends StatelessWidget {
           iconColor: item.color.color,
           selectedColor: item.color.color,
           onTap: () {
+            context.read<NavigationTodoCubit>().selectedToDoCollectionChange(
+              item.id,
+            );
             if (!context.isWideScreen) {
               debugPrint(item.id.value);
               context.goNamed(
