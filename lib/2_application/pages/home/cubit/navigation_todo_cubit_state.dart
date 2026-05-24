@@ -1,4 +1,4 @@
-part of 'navigation_todo_cubit_cubit.dart';
+part of 'navigation_todo_cubit.dart';
 
 class NavigationTodoCubitState extends Equatable {
   final CollectionId? selectedCollectionId;

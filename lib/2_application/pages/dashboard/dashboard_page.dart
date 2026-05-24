@@ -14,7 +14,7 @@ class DashBoardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AdaptivePaneLayout(
-      one: Container(color: Colors.purpleAccent),
+      mainScreen: Container(color: Colors.purpleAccent),
       // two: Container(color: Colors.white),
     );
   }

@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
 class AdaptivePaneLayout extends StatelessWidget {
-  const AdaptivePaneLayout({super.key, required this.one, this.two});
+  const AdaptivePaneLayout({
+    super.key,
+    required this.mainScreen,
+    this.secondaryScreen,
+  });
 
-  final Widget one;
-  final Widget? two;
+  final Widget mainScreen;
+  final Widget? secondaryScreen;
 
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    final bool isWideScreen = width >= 600 && two != null;
+    final bool isWideScreen = width >= 600 && secondaryScreen != null;
 
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
@@ -21,15 +25,18 @@ class AdaptivePaneLayout extends StatelessWidget {
           ? Row(
               key: const ValueKey('wide-layout'),
               children: [
-                Expanded(flex: 1000, child: one),
+                Expanded(flex: 1000, child: mainScreen),
                 Expanded(
                   // We use the dynamic flex here
                   flex: _getDetailFlex(width),
-                  child: two!,
+                  child: secondaryScreen!,
                 ),
               ],
             )
-          : SizedBox.expand(key: const ValueKey('narrow-layout'), child: one),
+          : SizedBox.expand(
+              key: const ValueKey('narrow-layout'),
+              child: mainScreen,
+            ),
     );
   }
 

@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
-class UniqueId {
+class UniqueId extends Equatable {
   // 1. THE PRIVATE CONSTRUCTOR
   // The "_" means only this class can talk to itself.
   // It ensures the 'value' can't be set randomly from the outside.
@@ -21,6 +22,9 @@ class UniqueId {
   factory UniqueId.fromUniqueString(String uniqueString) {
     return UniqueId._(uniqueString);
   }
+
+  @override
+  List<Object?> get props => [value];
 }
 
 class CollectionId extends UniqueId {

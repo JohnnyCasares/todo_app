@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:todo_app/2_application/core/router/router.dart';
-import 'package:todo_app/2_application/pages/home/cubit/navigation_todo_cubit_cubit.dart';
+import 'package:todo_app/2_application/pages/home/cubit/navigation_todo_cubit.dart';
 
 class BasicApp extends StatelessWidget {
   const BasicApp({super.key});
