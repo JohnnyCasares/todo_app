@@ -2,12 +2,8 @@ part of 'navigation_todo_cubit.dart';
 
 class NavigationTodoCubitState extends Equatable {
   final CollectionId? selectedCollectionId;
-  final bool? isSecondBodyDisplayed;
-  const NavigationTodoCubitState({
-    this.selectedCollectionId,
-    this.isSecondBodyDisplayed,
-  });
+  const NavigationTodoCubitState({this.selectedCollectionId});
 
   @override
-  List<Object?> get props => [selectedCollectionId, isSecondBodyDisplayed];
+  List<Object?> get props => [selectedCollectionId];
 }

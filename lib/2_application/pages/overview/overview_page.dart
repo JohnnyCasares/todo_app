@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/1_domain/use_cases/load_todo_collections.dart';
 import 'package:todo_app/2_application/core/navigation/destinations.dart';
-import 'package:todo_app/2_application/core/utils/breakpoints.dart';
 import 'package:todo_app/2_application/core/widgets/adaptive_pane_layout.dart';
 import 'package:todo_app/2_application/pages/detail/todo_detail_page.dart';
 import 'package:todo_app/2_application/pages/home/cubit/navigation_todo_cubit.dart';
@@ -41,11 +40,6 @@ class OverviewPage extends StatelessWidget {
     return AdaptivePaneLayout(
       mainScreen: BlocBuilder<ToDoOverviewCubit, ToDoOverviewCubitState>(
         builder: (context, state) {
-          final isSecondaryBodyDisplayed = context.isWideScreen;
-          //notify cubit that screen size has changed
-          context.read<NavigationTodoCubit>().secondBodyHasChanged(
-            isSecondBodyDisplayed: isSecondaryBodyDisplayed,
-          );
           if (state is TodoOverviewCubitLoadingState) {
             return const ToDoOverviewLoading();
           } else if (state is TodoOverviewCubitLoadedState) {

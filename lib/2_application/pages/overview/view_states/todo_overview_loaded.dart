@@ -33,7 +33,7 @@ class ToDoOverviewLoaded extends StatelessWidget {
               onTap: () {
                 context
                     .read<NavigationTodoCubit>()
-                    .selectedToDoCollectionChange(item.id);
+                    .selectedToDoCollectionChanged(item.id);
 
                 if (!context.isWideScreen) {
                   debugPrint(item.id.value);

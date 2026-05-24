@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/2_application/core/router/go_router_observer.dart';
+import 'package:todo_app/2_application/core/utils/breakpoints.dart';
 import 'package:todo_app/2_application/pages/detail/todo_detail_page.dart';
 import 'package:todo_app/2_application/pages/home/cubit/navigation_todo_cubit.dart';
 import 'package:todo_app/2_application/pages/home/home_page.dart';
@@ -49,16 +50,40 @@ final routes = GoRouter(
       path: '$_basePath/overview/:collectionId',
       name: TodoDetailPage.pageConfig.routeName,
       builder: (context, state) {
-        return BlocListener<NavigationTodoCubit, NavigationTodoCubitState>(
-          listenWhen: (previous, current) {
-            debugPrint(
-              "Did screen size change${previous.isSecondBodyDisplayed != current.isSecondBodyDisplayed}",
-            );
-            return previous.isSecondBodyDisplayed !=
-                current.isSecondBodyDisplayed;
-          },
-          listener: (context, state) {
-            if (context.canPop() && (state.isSecondBodyDisplayed ?? false)) {
+        final collectionId = CollectionId.fromUniqueString(
+          state.pathParameters['collectionId'] ?? '',
+        );
+        return _DetailRouteHost(collectionId: collectionId);
+      },
+    ),
+  ],
+);
+
+class _DetailRouteHost extends StatelessWidget {
+  const _DetailRouteHost({required this.collectionId});
+  final CollectionId collectionId;
+
+  @override
+  Widget build(BuildContext context) {
+    if (context.isWideScreen) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        context.read<NavigationTodoCubit>().selectedToDoCollectionChanged(
+          collectionId,
+        );
+        context.goNamed(
+          HomePage.pageConfig.routeName,
+          pathParameters: {'tab': OverviewPage.pageConfig.routeName},
+        );
+      });
+      return const SizedBox.shrink();
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Details'),
+        leading: BackButton(
+          onPressed: () {
+            if (context.canPop()) {
               context.pop();
             } else {
               context.goNamed(
@@ -67,32 +92,9 @@ final routes = GoRouter(
               );
             }
           },
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text('Details'),
-              leading: BackButton(
-                onPressed: () {
-                  if (context.canPop()) {
-                    context.pop();
-                  } else {
-                    context.goNamed(
-                      HomePage.pageConfig.routeName,
-                      pathParameters: {
-                        'tab': OverviewPage.pageConfig.routeName,
-                      },
-                    );
-                  }
-                },
-              ),
-            ),
-            body: ToDoDetailPageProvider(
-              collectionId: CollectionId.fromUniqueString(
-                state.pathParameters['collectionId'] ?? '',
-              ),
-            ),
-          ),
-        );
-      },
-    ),
-  ],
-);
+        ),
+      ),
+      body: ToDoDetailPageProvider(collectionId: collectionId),
+    );
+  }
+}
