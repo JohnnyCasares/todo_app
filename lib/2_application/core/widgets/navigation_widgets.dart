@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/2_application/core/navigation/destinations.dart';
+import 'package:todo_app/2_application/pages/create_todo_collection/create_todo_colletion_page.dart';
 import 'package:todo_app/2_application/pages/settings/settings_page.dart';
 
 ///DisappearingBottomNavigationBar is used for mobile and smal vertical content
@@ -54,6 +55,13 @@ class DisappearingNavigationRail extends StatelessWidget {
           label: Text(d.routeName),
         );
       }).toList(),
+      leading: IconButton(
+        onPressed: () {
+          context.pushNamed(CreateToDoCollectionPage.pageConfig.routeName);
+        },
+        icon: Icon(CreateToDoCollectionPage.pageConfig.icon),
+        tooltip: 'Add collection',
+      ),
       trailingAtBottom: true,
       trailing: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:todo_app/1_domain/entities/unique_id.dart';
 import 'package:todo_app/2_application/core/router/go_router_observer.dart';
 import 'package:todo_app/2_application/core/utils/breakpoints.dart';
+import 'package:todo_app/2_application/pages/create_todo_collection/create_todo_colletion_page.dart';
 import 'package:todo_app/2_application/pages/detail/todo_detail_page.dart';
 import 'package:todo_app/2_application/pages/home/cubit/navigation_todo_cubit.dart';
 import 'package:todo_app/2_application/pages/home/home_page.dart';
@@ -44,6 +45,30 @@ final routes = GoRouter(
           ),
         ),
       ],
+    ),
+
+    GoRoute(
+      path:
+          '$_basePath/overview/${CreateToDoCollectionPage.pageConfig.routeName}',
+      name: CreateToDoCollectionPage.pageConfig.routeName,
+      builder: (context, state) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Create Collection'),
+          leading: BackButton(
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.goNamed(
+                  HomePage.pageConfig.routeName,
+                  pathParameters: {'tab': OverviewPage.pageConfig.routeName},
+                );
+              }
+            },
+          ),
+        ),
+        body: SafeArea(child: CreateToDoCollectionPage.pageConfig.child),
+      ),
     ),
 
     GoRoute(
