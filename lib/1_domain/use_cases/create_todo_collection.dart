@@ -11,7 +11,9 @@ class CreateToDoCollection implements UseCase<bool, ToDoCollectionParams> {
   @override
   Future<Either<Failure, bool>> call(params) async {
     try {
-      final result = toDoRepository.createToDoCollection(params.collection);
+      final result = await toDoRepository.createToDoCollection(
+        params.collection,
+      );
 
       return await result.fold((left) => Left(left), (right) => Right(right));
     } on Exception catch (e) {
