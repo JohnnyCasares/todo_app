@@ -12,9 +12,14 @@ class LoadTodoEntryIdsForCollection
   @override
   Future<Either<Failure, List<EntryId>>> call(CollectionIdParam params) async {
     try {
-      final loadedIds = toDoRepository.readToDoEntryIds(params.collectionId);
+      final loadedIds = await toDoRepository.readToDoEntryIds(
+        params.collectionId,
+      );
 
-      return loadedIds.fold((left) => Left(left), (right) => Right(right));
+      return await loadedIds.fold(
+        (left) => Left(left),
+        (right) => Right(right),
+      );
     } on Exception catch (e) {
       return Left(ServerFailure(stackTrace: e.toString()));
     }

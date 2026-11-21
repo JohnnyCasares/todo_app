@@ -56,6 +56,7 @@ class DisappearingNavigationRail extends StatelessWidget {
         );
       }).toList(),
       leading: IconButton(
+        key: Key('create-todo-collection'),
         onPressed: () {
           context.pushNamed(CreateToDoCollectionPage.pageConfig.routeName);
         },

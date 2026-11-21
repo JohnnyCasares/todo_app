@@ -11,11 +11,14 @@ class LoadTodoEntry implements UseCase<ToDoEntry, ToDoEntryIdParam> {
   @override
   Future<Either<Failure, ToDoEntry>> call(ToDoEntryIdParam params) async {
     try {
-      final loadedEntry = toDoRepository.readToDoEntry(
+      final loadedEntry = await toDoRepository.readToDoEntry(
         params.collectionId,
         params.entryId,
       );
-      return loadedEntry.fold((left) => Left(left), (right) => Right(right));
+      return await loadedEntry.fold(
+        (left) => Left(left),
+        (right) => Right(right),
+      );
     } on Exception catch (e) {
       return Left(ServerFailure(stackTrace: e.toString()));
     }

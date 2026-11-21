@@ -81,11 +81,23 @@ class _CreateToDoCollectionPageState extends State<CreateToDoCollectionPage> {
 
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final isValid = _formKey.currentState?.validate();
                 if (isValid == true) {
-                  context.read<CreateToDoCollectionPageCubit>().submit();
-                  context.pop();
+                  final saved = await context
+                      .read<CreateToDoCollectionPageCubit>()
+                      .submit();
+                  if (!context.mounted) return;
+                  if (saved) {
+                    // `true` tells the detail page a new entry was created.
+                    context.pop(true);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Could not save the entry, try again'),
+                      ),
+                    );
+                  }
                 }
               },
               child: Text('Save Collection'),

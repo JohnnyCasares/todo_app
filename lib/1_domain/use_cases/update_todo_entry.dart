@@ -14,7 +14,10 @@ class UpdateTodoEntry implements UseCase<ToDoEntry, ToDoEntryIdParam> {
         collectionId: params.collectionId,
         entryId: params.entryId,
       );
-      return loadedEntry.fold((left) => Left(left), (right) => Right(right));
+      return await loadedEntry.fold(
+        (left) => Left(left),
+        (right) => Right(right),
+      );
     } on Exception catch (e) {
       return Left(ServerFailure(stackTrace: e.toString()));
     }
